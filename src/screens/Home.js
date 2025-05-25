@@ -1,5 +1,6 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import socketManager from '../Socket/SocketManager';
 import {useGetDogsQuery} from '../store/apiSlice';
 
@@ -25,12 +26,24 @@ const Home = () => {
     }
   };
 
+  const insets = useSafeAreaInsets();
+
   return (
     <SafeAreaView
-      style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text onPress={onPress} style={{padding: 20, backgroundColor: 'red'}}>
-        Home
-      </Text>
+      edges={['top']}
+      style={{
+        flex: 1,
+        backgroundColor: 'red',
+      }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'orange',
+        }}>
+        <Text onPress={onPress} style={{padding: 20, backgroundColor: 'red'}}>
+          Home
+        </Text>
+      </View>
     </SafeAreaView>
   );
 };
