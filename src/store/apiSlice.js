@@ -13,60 +13,108 @@ const createInfiniteQuery = ({
   customTransform = null,
   enableBidirectional = false,
 }) => {
+  if (typeof endpoint !== 'string') {
+    throw new Error('Endpoint must be a string');
+  }
+
   return {
     infiniteQueryOptions: {
       initialPageParam: startPage,
 
       getNextPageParam: (lastPage, allPages, lastPageParam) => {
-        const totalItemsLoaded = allPages.reduce(
-          (total, page) => total + (page?.[dataKey]?.length || 0),
-          0,
-        );
+        try {
+          const totalItemsLoaded = Array.isArray(allPages)
+            ? allPages.reduce(
+                (total, page) =>
+                  total +
+                  (Array.isArray(page?.[dataKey]) ? page[dataKey].length : 0),
+                0,
+              )
+            : 0;
 
-        // If we've loaded all items, no next page
-        if (totalItemsLoaded >= lastPage?.totalCount) {
+          const totalCount = Number(lastPage?.totalCount) || 0;
+
+          if (totalItemsLoaded >= totalCount) {
+            return undefined; // All items loaded
+          }
+
+          return (
+            (typeof lastPageParam === 'number' ? lastPageParam : startPage) + 1
+          );
+        } catch (error) {
+          console.warn('Error in getNextPageParam:', error);
           return undefined;
         }
-
-        // Otherwise, increment page number
-        return lastPageParam + 1;
       },
 
       getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
-        // Always return a function, but only enable bidirectional if requested
         if (!enableBidirectional) {
           return undefined;
         }
-        return firstPageParam > startPage ? firstPageParam - 1 : undefined;
+
+        try {
+          return firstPageParam > startPage ? firstPageParam - 1 : undefined;
+        } catch (error) {
+          console.warn('Error in getPreviousPageParam:', error);
+          return undefined;
+        }
       },
 
       maxPages,
     },
 
     query: ({queryArg = {}, pageParam}) => {
-      const {limit = defaultLimit, ...filters} = queryArg;
+      try {
+        const {limit = defaultLimit, ...filters} = queryArg || {};
 
-      // Build query parameters
-      const params = new URLSearchParams({
-        page: pageParam?.toString(),
-        limit: limit?.toString(),
-        ...filters,
-      });
+        const params = new URLSearchParams();
 
-      return `${endpoint}?${params.toString()}`;
+        // Ensure page and limit are numbers
+        const safePage = typeof pageParam === 'number' ? pageParam : startPage;
+        params.append('page', safePage?.toString());
+        params.append('limit', Number(limit).toString());
+
+        // Append filters safely
+        for (const key in filters) {
+          if (
+            filters[key] !== undefined &&
+            filters[key] !== null &&
+            filters[key] !== ''
+          ) {
+            params.append(key, filters[key].toString());
+          }
+        }
+
+        return `${endpoint}?${params.toString()}`;
+      } catch (error) {
+        console.warn('Error in query building:', error);
+        return endpoint; // fallback to just the endpoint
+      }
     },
 
     transformResponse: response => {
-      // Use custom transform if provided
-      if (customTransform) {
-        return customTransform(response);
-      }
+      try {
+        if (typeof customTransform === 'function') {
+          return customTransform(response);
+        }
 
-      // Default transform
-      return {
-        [dataKey]: response?.[dataKey] || [],
-        totalCount: response?.totalCount || 0,
-      };
+        const data = Array.isArray(response?.[dataKey])
+          ? response[dataKey]
+          : [];
+
+        const totalCount = Number(response?.totalCount) || data.length;
+
+        return {
+          [dataKey]: data,
+          totalCount,
+        };
+      } catch (error) {
+        console.warn('Error in transformResponse:', error);
+        return {
+          [dataKey]: [],
+          totalCount: 0,
+        };
+      }
     },
   };
 };
@@ -74,8 +122,6 @@ const createInfiniteQuery = ({
 // Enhanced base query with automatic data unwrapping
 const unwrappingBaseQuery = async (args, api, extraOptions) => {
   const result = await customBaseQuery(args, api, extraOptions);
-
-  console.log('Base Query Result: **------>', args);
 
   if (result.error) {
     return result;
