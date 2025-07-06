@@ -20,7 +20,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: [apiSlice.reducerPath], // 👈 Persist RTK Query cache
+  whitelist: [], // 👈 Persist RTK Query cache
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

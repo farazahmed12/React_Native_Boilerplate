@@ -1,119 +1,117 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 
-// https://dog.ceo/api/breeds/image/random Fetch!
+const customBaseQuery = fetchBaseQuery({
+  baseUrl: 'https://testing.backend.safqaauction.com/api/v1',
+});
 
-const now = () => new Date().toTimeString().split(' ')[0];
+const createInfiniteQuery = ({
+  endpoint,
+  dataKey = 'products',
+  defaultLimit = 10,
+  maxPages = 10,
+  startPage = 1,
+  customTransform = null,
+  enableBidirectional = false,
+}) => {
+  return {
+    infiniteQueryOptions: {
+      initialPageParam: startPage,
 
-const color = {
-  blue: '\x1b[44m%s\x1b[0m',
-  green: '\x1b[42m%s\x1b[0m',
-  red: '\x1b[41m%s\x1b[0m',
-  yellow: '\x1b[43m%s\x1b[0m',
-  magenta: '\x1b[45m%s\x1b[0m',
-  cyan: '\x1b[46m%s\x1b[0m',
-  white: '\x1b[47m%s\x1b[0m',
-  orange: '\x1b[48m%s\x1b[0m',
-};
+      getNextPageParam: (lastPage, allPages, lastPageParam) => {
+        const totalItemsLoaded = allPages.reduce(
+          (total, page) => total + (page?.[dataKey]?.length || 0),
+          0,
+        );
 
-const logSection = (label, value, colorTheme) => {
-  if (value) {
-    console.log(`\x1b[30m${colorTheme}`, ` ${label}:`, value, '\x1b[0m');
-  }
-};
+        // If we've loaded all items, no next page
+        if (totalItemsLoaded >= lastPage?.totalCount) {
+          return undefined;
+        }
 
-export const customBaseQuery = ({baseUrl}) => {
-  const rawBaseQuery = fetchBaseQuery({baseUrl});
+        // Otherwise, increment page number
+        return lastPageParam + 1;
+      },
 
-  return async (args, api, extraOptions) => {
-    const method = args.method || 'GET';
-    const url = typeof args === 'string' ? args : args.url;
-    const fullUrl = `${baseUrl}${url}`;
-    const endpoint = api.endpoint;
+      getPreviousPageParam: (firstPage, allPages, firstPageParam) => {
+        // Always return a function, but only enable bidirectional if requested
+        if (!enableBidirectional) {
+          return undefined;
+        }
+        return firstPageParam > startPage ? firstPageParam - 1 : undefined;
+      },
 
-    // 🌐 REQUEST
-    console.log('\n' + color.magenta, `[API REQUEST] 📤 ${method} ${fullUrl}`);
-    logSection('⏱️ Time', now(), color.magenta);
-    logSection('🏷️ Endpoint', endpoint, color.magenta);
-    logSection('🧾 Headers', args.headers, color.magenta);
-    logSection('📦 Body', args.body, color.magenta);
-    logSection('🔸 Params', args.params, color.magenta);
+      maxPages,
+    },
 
-    const result = await rawBaseQuery(args, api, extraOptions);
+    query: ({queryArg = {}, pageParam}) => {
+      const {limit = defaultLimit, ...filters} = queryArg;
 
-    if (result.error) {
-      // ❌ ERROR
-      const status = result.error.status;
-      const errData = result.error.data;
+      // Build query parameters
+      const params = new URLSearchParams({
+        page: pageParam?.toString(),
+        limit: limit?.toString(),
+        ...filters,
+      });
 
-      console.log(
-        '\n' + `\x1b[30m${color.yellow}`,
-        `[API ERROR] ❌ ${method} ${fullUrl}`,
-        '\x1b[0m',
-      );
-      logSection('⏱️ Time', now(), color.yellow);
-      logSection('🏷️ Endpoint', endpoint, color.yellow);
-      logSection('📉 Status', status, color.yellow);
-      logSection('🧨 Error', errData, color.yellow);
-    } else {
-      // ✅ RESPONSE
-      const status = result.meta?.response?.status;
-      const resData = result.data;
+      return `${endpoint}?${params.toString()}`;
+    },
 
-      console.log('\n' + color.green, `[API RESPONSE] ✅ ${method} ${fullUrl}`);
-      logSection('⏱️ Time', now(), color.green);
-      logSection('🏷️ Endpoint', endpoint, color.green);
-      logSection('📈 Status', status, color.green);
-      logSection('📤 Response', resData, color.green);
-    }
+    transformResponse: response => {
+      // Use custom transform if provided
+      if (customTransform) {
+        return customTransform(response);
+      }
 
-    return {
-      ...result,
-      data: result.data?.data ?? result.data,
-    };
+      // Default transform
+      return {
+        [dataKey]: response?.[dataKey] || [],
+        totalCount: response?.totalCount || 0,
+      };
+    },
   };
 };
 
+// Enhanced base query with automatic data unwrapping
+const unwrappingBaseQuery = async (args, api, extraOptions) => {
+  const result = await customBaseQuery(args, api, extraOptions);
+
+  console.log('Base Query Result: **------>', args);
+
+  if (result.error) {
+    return result;
+  }
+
+  // Unwrap nested data structure - drill down until no more .data keys
+  let data = result.data;
+  while (data?.data) {
+    data = data.data;
+  }
+
+  return {...result, data};
+};
+
 export const apiSlice = createApi({
-  reducerPath: 'apiSlice',
-  baseQuery: customBaseQuery({baseUrl: 'https://jsonplaceholder.typicode.com'}),
-  // baseQuery: customBaseQueryGrok,
+  reducerPath: 'api',
+  baseQuery: unwrappingBaseQuery,
+  endpoints: build => ({
+    getProducts: build.infiniteQuery(
+      createInfiniteQuery({
+        endpoint: '/products',
+        dataKey: 'products',
+        defaultLimit: 10,
+        maxPages: 10,
+        startPage: 1,
+        customTransform: response => ({
+          products: response?.products || [],
+          totalCount: response?.totalCount || 0,
+        }),
+      }),
+    ),
 
-  endpoints: builder => ({
-    getDogs: builder.query({
-      query: credentials => ({
-        url: '/breeds/image/random',
-        method: 'GET',
-        body: credentials,
-      }),
-      serializeQueryArgs: ({endpointName, queryArgs}) => {
-        return `${endpointName}-${queryArgs}`;
-      },
-      transformResponse: response => {
-        return response;
-      },
-      refetchOnMountOrArgChange: true,
-      refetchOnFocus: true,
-      refetchOnReconnect: true,
-      keepUnusedDataFor: 3600,
-    }),
-
-    getPosts: builder.query({
-      query: (q = '') => ({
-        url: `/posts${q}`,
-        method: 'GET',
-      }),
-    }),
-    getInvalidRoute: builder.query({
-      query: () => ({
-        url: '/invalid-route',
-        method: 'GET',
-      }),
+    getCart: build.query({
+      query: () => '/cart',
     }),
   }),
-  refetchOnFocus: true,
-  refetchOnReconnect: true,
-  keepUnusedDataFor: 3600,
 });
 
-export const {useGetDogsQuery, useGetPostsQuery, useGetInvalidRouteQuery} =
-  apiSlice;
+export const {useGetProductsInfiniteQuery} = apiSlice;

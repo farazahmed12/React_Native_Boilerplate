@@ -3,8 +3,11 @@ import {StyleSheet} from 'react-native';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeBaseProvider} from 'native-base';
-import ScrollViewHeader from './src/screens/ScrollViewHeader';
+import DuplicateItemsRtk from './src/screens/DuplicateItemsRtk';
+import SingleItem from './src/screens/SingleItem';
 import {persistor, store} from './src/store';
 
 const App = () => {
@@ -46,11 +49,21 @@ const App = () => {
   //   };
   // }, []);
 
+  const Stack = createNativeStackNavigator();
+
   return (
     <NativeBaseProvider>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <ScrollViewHeader />
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen
+                name="DuplicateItemsRtk"
+                component={DuplicateItemsRtk}
+              />
+              <Stack.Screen name="SingleItem" component={SingleItem} />
+            </Stack.Navigator>
+          </NavigationContainer>
         </PersistGate>
       </Provider>
     </NativeBaseProvider>
