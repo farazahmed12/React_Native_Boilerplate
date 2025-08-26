@@ -4919,7 +4919,7 @@ intl-messageformat@^10.1.0:
     "@formatjs/icu-messageformat-parser" "2.11.2"
     tslib "^2.8.0"
 
-invariant@^2.2.4:
+invariant@2.2.4, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -6792,6 +6792,11 @@ react-is@^19.1.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.1.0.tgz#805bce321546b7e14c084989c77022351bbdd11b"
   integrity sha512-Oe56aUPnkHyyDxxkvqtd7KkdQP5uIUfHxd5XTb3wE9d/kRnZLmKbDB0GWk919tdQ+mxxPtG6EAs6RMT6i1qtHg==
 
+react-native-cn-quill@^0.7.20:
+  version "0.7.20"
+  resolved "https://registry.yarnpkg.com/react-native-cn-quill/-/react-native-cn-quill-0.7.20.tgz#649234be6f197404c15c2f29f3a9e8d77efdeb59"
+  integrity sha512-zlDP5JchRz+1E1PWPLN3eFCAhrucQP54hXmZMjEdY/flZ+GO4Nkq/1IKNpL+ZD3dBeJF6/fFN4oCF+zNq1PjXw==
+
 react-native-gesture-handler@^2.25.0:
   version "2.25.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.25.0.tgz#3a5a8912ea4f5e68ab211a9fa5a191c08ad50883"
@@ -6876,6 +6881,14 @@ react-native-video@^6.13.0:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.13.0.tgz#c5161176fa3cbe78966ea1f26faa92503cbf475f"
   integrity sha512-eY6jgLcmYKAAlAZhsZbp8wfCVrGu7jmUYTTspn8udN8j4jqr4Fq90ROOM/QegGkwNs4waclL0IkzGuq61kT4DQ==
+
+react-native-webview@^13.16.0:
+  version "13.16.0"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-13.16.0.tgz#c995148f944a7eaf12389f0e6d5c6f5e6a775686"
+  integrity sha512-Nh13xKZWW35C0dbOskD7OX01nQQavOzHbCw9XoZmar4eXCo7AvrYJ0jlUfRVVIJzqINxHlpECYLdmAdFsl9xDA==
+  dependencies:
+    escape-string-regexp "^4.0.0"
+    invariant "2.2.4"
 
 react-native@0.76.0:
   version "0.76.0"

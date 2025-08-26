@@ -1377,6 +1377,27 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-webview (13.16.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - React-nativeconfig (0.76.0)
   - React-NativeModulesApple (0.76.0):
     - glog
@@ -1959,6 +1980,7 @@ DEPENDENCIES:
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-video (from `../node_modules/react-native-video`)
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -2078,6 +2100,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-video:
     :path: "../node_modules/react-native-video"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-nativeconfig:
     :path: "../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -2154,7 +2178,7 @@ SPEC CHECKSUMS:
   fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
   glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   hermes-engine: 9de51d2f67336348a6cd5b686330e436d1dbd522
-  RCT-Folly: 84578c8756030547307e4572ab1947de1685c599
+  RCT-Folly: bf5c0376ffe4dd2cf438dcf86db385df9fdce648
   RCTDeprecation: 4c2c4a088b6f0ccfcbd53c9d5614b0238ad57909
   RCTRequired: 2d8a683a7848bc0baf5883f0792c1ac43f6267b5
   RCTTypeSafety: 23df4344c69c602e1c5a8053a93c633af1bee825
@@ -2187,6 +2211,7 @@ SPEC CHECKSUMS:
   react-native-orientation-locker: 5819fd23ca89cbac0d736fb4314745f62716d517
   react-native-safe-area-context: 38c2f4e767df857b38c6fbc25843e1d8d080f776
   react-native-video: 4f7dc0e9c14a2cd2c438c0fe8392c3c98bdd29bb
+  react-native-webview: c5717aa37a215cce26697122c6f4e259d6ed7fa0
   React-nativeconfig: 72c10ff34863148ef90df9c9c8eacba99d2faaaa
   React-NativeModulesApple: 5ec49182fa000b2215ee1bed03e2867f8323ccf5
   React-perflogger: 073c7a8a436b3fe724f1df34e9d1f3db1d25fe74

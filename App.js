@@ -7,7 +7,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeBaseProvider} from 'native-base';
 import DuplicateItemsRtk from './src/screens/DuplicateItemsRtk';
-import SingleItem from './src/screens/SingleItem';
+import Quill from './src/screens/Quill';
 import {persistor, store} from './src/store';
 
 const App = () => {
@@ -56,12 +56,12 @@ const App = () => {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator initialRouteName="Quill">
               <Stack.Screen
                 name="DuplicateItemsRtk"
                 component={DuplicateItemsRtk}
               />
-              <Stack.Screen name="SingleItem" component={SingleItem} />
+              <Stack.Screen name="Quill" component={Quill} />
             </Stack.Navigator>
           </NavigationContainer>
         </PersistGate>
