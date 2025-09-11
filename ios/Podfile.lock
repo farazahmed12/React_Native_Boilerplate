@@ -43,6 +43,7 @@ PODS:
     - React-RCTText (= 0.76.0)
     - React-RCTVibration (= 0.76.0)
   - React-callinvoker (0.76.0)
+  - React-Codegen (0.1.0)
   - React-Core (0.76.0):
     - glog
     - hermes-engine
@@ -1935,6 +1936,13 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - skyflow-react-native (1.9.0):
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - ReactCommon/turbomodule/core
   - SocketRocket (0.7.1)
   - Yoga (0.0.0)
 
@@ -2014,10 +2022,12 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - skyflow-react-native (from `../node_modules/skyflow-react-native`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
+    - React-Codegen
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -2168,6 +2178,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  skyflow-react-native:
+    :path: "../node_modules/skyflow-react-native"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -2184,6 +2196,7 @@ SPEC CHECKSUMS:
   RCTTypeSafety: 23df4344c69c602e1c5a8053a93c633af1bee825
   React: cf99f97aa57ce39ab4d3d4f396e01a3f30f3c8ad
   React-callinvoker: bec5283f86b784de5a1ba807e31cb4f177765507
+  React-Codegen: 4b8b4817cea7a54b83851d4c1f91f79aa73de30a
   React-Core: 3b131c387be8d45565fc32c6c08df7a450d8d5a8
   React-CoreModules: ac0a55891bcb72a9f8c6631128e7cbbf9ce06b65
   React-cxxreact: fec14d0078f627985b2cce98f90458e969a848ae
@@ -2245,6 +2258,7 @@ SPEC CHECKSUMS:
   RNScreens: d6f4dbe56b2cb436de4ac9513a6e7a565f4965f0
   RNSVG: 2df153c20fffef75a099c23836cd5e9ecba386fe
   RNVectorIcons: 07792a9538e8577c1263fcad187712e90d65d8fb
+  skyflow-react-native: cddec55ecb9c0bda2d0ceff159ba89caa5207651
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: f8ec45ce98bba1bc93dd28f2ee37215180e6d2b6
 

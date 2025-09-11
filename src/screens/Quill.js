@@ -4,7 +4,7 @@ import QuillEditor from 'react-native-cn-quill';
 
 const {width, height} = Dimensions.get('window');
 
-export default function App() {
+export default function Quill() {
   const _editor = React.createRef();
 
   return (
