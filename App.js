@@ -8,6 +8,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeBaseProvider} from 'native-base';
 import {SkyflowProvider} from 'skyflow-react-native';
 import DuplicateItemsRtk from './src/screens/DuplicateItemsRtk';
+import QRCodeScan from './src/screens/QRCodeScan';
 import Quill from './src/screens/Quill';
 import SkyFlowScreen from './src/screens/SkyFlow';
 import {persistor, store} from './src/store';
@@ -63,13 +64,14 @@ const App = () => {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <NavigationContainer>
-              <Stack.Navigator initialRouteName="SkyFlowScreen">
+              <Stack.Navigator initialRouteName="QRCodeScan">
                 <Stack.Screen
                   name="DuplicateItemsRtk"
                   component={DuplicateItemsRtk}
                 />
                 <Stack.Screen name="Quill" component={Quill} />
                 <Stack.Screen name="SkyFlowScreen" component={SkyFlowScreen} />
+                <Stack.Screen name="QRCodeScan" component={QRCodeScan} />
               </Stack.Navigator>
             </NavigationContainer>
           </PersistGate>
