@@ -6,23 +6,24 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeBaseProvider} from 'native-base';
-import {SkyflowProvider} from 'skyflow-react-native';
+import MainWrapper from './src/provider/MainWrapper';
 import DuplicateItemsRtk from './src/screens/DuplicateItemsRtk';
+import Home from './src/screens/Home';
 import QRCodeScan from './src/screens/QRCodeScan';
 import Quill from './src/screens/Quill';
 import SkyFlowScreen from './src/screens/SkyFlow';
 import {persistor, store} from './src/store';
 
 const App = () => {
-  const config = {
-    vaultID: 'string', // ID of the vault that the client should connect to.
-    vaultURL: 'string', // URL of the vault that the client should connect to.
-    getBearerToken: 'helperFunc', // Helper function that retrieves a Skyflow bearer token from your backend.
-    options: {
-      // logLevel: LogLevel.DEBUG, // Optional, if not specified default is ERROR.
-      // env: Env.DEV, // Optional, if not specified default is PROD.
-    },
-  };
+  // const config = {
+  //   vaultID: 'string', // ID of the vault that the client should connect to.
+  //   vaultURL: 'string', // URL of the vault that the client should connect to.
+  //   getBearerToken: 'helperFunc', // Helper function that retrieves a Skyflow bearer token from your backend.
+  //   options: {
+  //     // logLevel: LogLevel.DEBUG, // Optional, if not specified default is ERROR.
+  //     // env: Env.DEV, // Optional, if not specified default is PROD.
+  //   },
+  // };
   // useEffect(() => {
   //   // Connect to socket when app launches
   //   socketManager.connect(userId);
@@ -59,12 +60,12 @@ const App = () => {
   const Stack = createNativeStackNavigator();
 
   return (
-    <SkyflowProvider config={config}>
-      <NativeBaseProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+    <NativeBaseProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <MainWrapper>
             <NavigationContainer>
-              <Stack.Navigator initialRouteName="QRCodeScan">
+              <Stack.Navigator initialRouteName="Home">
                 <Stack.Screen
                   name="DuplicateItemsRtk"
                   component={DuplicateItemsRtk}
@@ -72,12 +73,13 @@ const App = () => {
                 <Stack.Screen name="Quill" component={Quill} />
                 <Stack.Screen name="SkyFlowScreen" component={SkyFlowScreen} />
                 <Stack.Screen name="QRCodeScan" component={QRCodeScan} />
+                <Stack.Screen name="Home" component={Home} />
               </Stack.Navigator>
             </NavigationContainer>
-          </PersistGate>
-        </Provider>
-      </NativeBaseProvider>
-    </SkyflowProvider>
+          </MainWrapper>
+        </PersistGate>
+      </Provider>
+    </NativeBaseProvider>
   );
 };
 
